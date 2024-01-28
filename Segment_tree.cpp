@@ -84,6 +84,13 @@ class SegmentTree{
         }
     }
 
+    long long lower_bound(int n, int l1, int r1, int i){
+        if(tree[i] < n) return LONG_MAX;
+        if(l1 == r1) return l1;
+        if(tree[2*i+1] >= n) return lower_bound(n,l1,(l1+r1)/2,2*i+1);
+        return lower_bound(n,(l1+r1)/2+1,r1,2*i+2);
+    }
+
     public:
     SegmentTree(vector<int>& nums) : sz(nums.size()), tree(4*nums.size()), lazyTree(4*nums.size()){
         minSegmentTree(nums,0,0,sz-1);
@@ -111,6 +118,10 @@ class SegmentTree{
     
     long long rangeUpdate(int n, int l, int r){
         return rangeUpdate(n,l,r,0,sz-1,0);
+    }
+
+    long long lower_bound(int n){
+        return lower_bound(n,0,sz-1,0);
     }
     
     void printTree(){
