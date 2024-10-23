@@ -1,29 +1,25 @@
 class FenwickTree{
-    vector<int> tree;
-    int sz;
+    vector<int> bit;
+    int n;
 
-    public:
-    FenwickTree(vector<int>& nums) : tree(nums.size()+1,0), sz(nums.size()){
-        for(int i=1; i<=sz; ++i){
-            update(i,nums[i-1]);
+    FenwickTree(vector<int> const &a) : n(a.size()){
+        bit.assign(n,0);
+        for(int i=0; i<n; ++i){
+            add(i,a[i]);
         }
     }
 
-    int query(int i){
-        int s = 0;
-        for(int j=i; j>0; j -= -j&j) s += tree[j];
-        return s;
+    int sum(int r){
+        int res = 0;
+        for(;r >= 0; r = (r & (r+1))-1) res = res + bit[r];
+        return res;
     }
 
-    void update(int i, int k){
-        for(int j=i; j<=sz; j += -j&j){
-            tree[j] += k;
-        }
+    int sum(int l, int r){
+        return sum(r)-sum(l-1);
     }
 
-    void printTree(){
-        cout<<"FT: ";
-        for(int i : tree) cout<<i<<",";
-        cout<<endl;
+    void add(int i, int d){
+        for(; i<n; i = i | (i+1)) bit[i] = bit[i]+d;
     }
 };
